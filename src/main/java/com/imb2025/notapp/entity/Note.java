@@ -3,8 +3,9 @@ package com.imb2025.notapp.entity;
 import jakarta.persistence.*;
 
 @Entity
+
 @Table(name = "notes")
-public class Notes {
+public class Note{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

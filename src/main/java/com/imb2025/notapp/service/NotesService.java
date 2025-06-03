@@ -2,13 +2,13 @@ package com.imb2025.notapp.service;
 
 import java.util.List;
 
-import com.imb2025.notapp.entity.Notes;
+import com.imb2025.notapp.entity.Note;
 
-public interface NotesService {
+public interface INotesService {
 
     Notes findById(Long id);
 
-    List<Notes> findAll();
+    List<Note> findAll();
 
     Notes save(Notes estadoCursada);
 
