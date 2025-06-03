@@ -1,11 +1,13 @@
 package com.imb2025.notapp.service.jpa;
 
+import com.imb2025.notapp.entity.Note;
 import com.imb2025.notapp.entity.Notes;
 import com.imb2025.notapp.repository.NotesRepository;
 import com.imb2025.notapp.service.NotesService;
 
 import java.util.List;
 
+import com.imb2025.notapp.service.jpa.NoteService.NotesServiceProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,10 +16,11 @@ public class NotesServiceImp implements NotesService {
 
     @Autowired
     private NotesRepository repository;
+    private NotesServiceProcessor
 
     @Override
-    public List<Notes> findAll() {
-        return repository.findAll();
+    public List<Note> findAll() {
+
     }
     
     @Override

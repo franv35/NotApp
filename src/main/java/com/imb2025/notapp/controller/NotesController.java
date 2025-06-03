@@ -1,7 +1,6 @@
 package com.imb2025.notapp.controller;
 
-import com.imb2025.notapp.entity.Notes;
-import com.imb2025.notapp.service.jpa.NotesServiceImp;
+import com.imb2025.notapp.service.NotesService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -14,12 +13,12 @@ import java.util.List;
 public class NotesController {
 
     @Autowired
-    private NotesServiceImp service;
+    private NotesService iservice
 
     @GetMapping
-    public ResponseEntity<List<Notes>> getAll() {
-        List<Notes> notes = service.findAll();
-        return ResponseEntity.ok(notes);
+    public List<Note> getAll() {
+
+        return iservice.findAll();
     }
 
     @GetMapping("/{id}")
