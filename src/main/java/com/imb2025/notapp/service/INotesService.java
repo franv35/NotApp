@@ -6,14 +6,11 @@ import com.imb2025.notapp.entity.Note;
 
 public interface INotesService {
 
-    Notes findById(Long id);
+    Note findById(Long id);
 
     List<Note> findAll();
 
-    Notes save(Notes estadoCursada);
-
-    Notes update(Long id, Notes estadoCursada);
-
-    void deleteById(Long id);
-
+    String deleteById(Long id);
+    String updateTitle(String title);
+    String updateContent(String content);
 }
