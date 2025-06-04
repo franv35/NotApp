@@ -1,10 +1,18 @@
 package com.imb2025.notapp.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Entity
 
 @Table(name = "notes")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Note{
 
     @Id
@@ -12,25 +20,15 @@ public class Note{
     private Long id;
     private String titulo;
     private String contenido;
+    private boolean estado = false; // predeterminada como NUEVA
 
-    // Getters y Setters
-    public Long getId() {
-        return id;
-    }
-    public void setId(Long id) {
-        this.id = id;
-    }
-    public String getTitulo() {
-        return titulo;
-    }
-    public void setTitulo(String titulo) {
-        this.titulo = titulo;
-    }
-    public String getContenido() {
-        return contenido;
-    }
-    public void setContenido(String contenido) {
-        this.contenido = contenido;
-    }
+    @OneToMany
+    private List<Etiqueta> etiquetas;
+
+
+
+
+
+
 	
 }
