@@ -10,7 +10,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Etiqueta {
-    private String nombreEti;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

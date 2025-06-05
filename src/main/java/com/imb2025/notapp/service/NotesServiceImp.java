@@ -1,5 +1,6 @@
 package com.imb2025.notapp.service;
 
+import com.imb2025.notapp.entity.Etiqueta;
 import com.imb2025.notapp.entity.Note;
 
 import java.util.List;
@@ -39,11 +40,19 @@ public class NotesServiceImp implements INotesService {
        if (noteOpt.isPresent())throw new RuntimeException("La nota ya existe");
        Note note=new Note();
         note.updateTitle(request.getTitle());
+        List<Etiqueta> etiquetas = request.getEtiquetas().stream()
+                .map(dto -> {
+                    Etiqueta e = new Etiqueta();
+                    e.setNombre(dto.getNombre());
+                    return e;
+                }).toList();
         note.updateContenido(request.getContenido());
-       note.setEtiquetas(request.getEtiquetas());
+        note.updateEtiquetas(request.getEtiquetas());
        noteRepository.save(note);
-       return "Nota creado exitosamente";
+       return "Nota creada exitosamente";
     }
+
+
     private Optional<Note> findByTitleRepository(String title){
         return noteRepository.findByTitle(title);
     }
