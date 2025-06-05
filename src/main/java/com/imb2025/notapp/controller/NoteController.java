@@ -2,6 +2,7 @@ package com.imb2025.notapp.controller;
 
 
 import com.imb2025.notapp.entity.Note;
+import com.imb2025.notapp.entity.NoteTerminada;
 import com.imb2025.notapp.entity.dto.RegisterRequest;
 import com.imb2025.notapp.service.INotesService;
 
@@ -29,6 +30,7 @@ public class NoteController {
     public ResponseEntity<String> createNote(@RequestBody RegisterRequest request){
     return ResponseEntity.ok(iNotesService.createNote(request));
     }
+
     @GetMapping("/{id}")
     public ResponseEntity<Note> findById(@PathVariable Long id){
         return ResponseEntity.ok(iNotesService.findById(id));
@@ -44,5 +46,13 @@ public class NoteController {
     @PutMapping("/editarcontenido")
     public ResponseEntity<String> updateContent(@RequestBody Long id,String content){
         return ResponseEntity.ok(iNotesService.updateContent(id,content));
+    }
+    @GetMapping("/obtenernotasterminadas")
+    public ResponseEntity<List<NoteTerminada>> findAllTerminadas(){
+        return ResponseEntity.ok(iNotesService.findAllTerminadas());
+    }
+    @PostMapping("/guardarnotaterminada/{id}")
+    public ResponseEntity<String> notaTerminada(@PathVariable Long id){
+        return ResponseEntity.ok(iNotesService.notaTerminada(id));
     }
 }
