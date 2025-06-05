@@ -20,10 +20,7 @@ public class Note{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String title;
-
     private String contenido;
-
-    private boolean estado = false; // predeterminada como NUEVA
 
     @OneToMany(mappedBy = "nota", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Etiqueta> etiquetas = new ArrayList<>();
@@ -35,6 +32,13 @@ public class Note{
     public void updateContenido(String contenido){
         if (contenido==null || contenido.isBlank())throw new RuntimeException("El contenido no puede estar en blanco");
         this.contenido=contenido;
+    }
+    public void updateEtiquetas(List<Etiqueta> nuevasEtiquetas) {
+        etiquetas.clear();
+        for (Etiqueta etiqueta : nuevasEtiquetas) {
+            etiqueta.setNota(this);
+            etiquetas.add(etiqueta);
+        }
     }
 
 
