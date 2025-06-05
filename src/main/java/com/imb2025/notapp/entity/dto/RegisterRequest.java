@@ -10,7 +10,7 @@ import java.util.List;
 public class RegisterRequest {
     private String title;
     private String contenido;
-    private List<Etiqueta> etiquetas;
+
 
 
 }

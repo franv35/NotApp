@@ -6,10 +6,10 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 function fetchAndDisplayNotes() {
-  fetch('/notes/obtenernotasterminadas')
+  fetch('/notes')
     .then(response => {
       if (!response.ok) {
-		if(response=505){
+		if(response.status==505){
 			throw new Error('No hay notas guardadas');
 		};
         throw new Error('Error al obtener las notas');
@@ -99,27 +99,27 @@ document.addEventListener('DOMContentLoaded', function () {
 function saveModalNote() {
   // Obtenemos los valores de los campos del modal
   const titulo = document.getElementById('modalNoteTitle').value;
-  const contenido = document.getElementById('modalNoteContent').value;
+  const content = document.getElementById('modalNoteContent').value;
 
   // Creamos el objeto que vamos a enviar al backend
   const noteData = {
-    titulo: titulo,
-    contenido: contenido
+    title: titulo,
+    contenido: content
   };
 
   // Enviamos los datos al backend usando fetch y método POST
   fetch('/notes/crear', {
-    method: 'POST', // Usamos el método POST porque el controlador lo espera así
+    method: 'POST',
     headers: {
-      'Content-Type': 'application/json' // Indicamos que estamos enviando JSON
+      'Content-Type': 'application/json'
     },
-    body: JSON.stringify(noteData) // Convertimos el objeto JS a JSON
+    body: JSON.stringify(noteData)
   })
   .then(response => {
     if (!response.ok) {
       throw new Error('Error al guardar la nota');
     }
-    return response.json(); // Interpretamos la respuesta como JSON
+    return response.text();
   })
   .then(data => {
     console.log('Nota creada correctamente:', data);
@@ -131,26 +131,15 @@ function saveModalNote() {
     // Cerramos el modal
     document.getElementById('noteModal').style.display = 'none';
 
-    // (Opcional) Mostrar mensaje al usuario
+    // Mostrar mensaje al usuario
     alert('✅ Nota guardada con éxito');
   })
-  
-  .then(data => {
-    console.log('Nota guardada:', data);
-    document.getElementById('modalNoteTitle').value = '';
-    document.getElementById('modalNoteContent').value = '';
-    document.getElementById('noteModal').style.display = 'none';
-
-    fetchAndDisplayNotes(); // << vuelve a cargar las notas desde el backend
-  })
-
   .catch(error => {
-    console.error('Error al crear la nota:', error);
-    alert('❌ Ocurrió un error al guardar la nota');
+    console.error('Error al guardar la nota:', error);
+    alert('❌ Hubo un problema al guardar la nota. Intenta de nuevo.');
   });
-  
-  
 }
+
 
 
 //ELIMINAR NOTAS

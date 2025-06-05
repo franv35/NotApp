@@ -1,7 +1,7 @@
 package com.imb2025.notapp.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.Valid;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,8 +22,6 @@ public class Note{
     private String title;
     private String contenido;
 
-    @OneToMany(mappedBy = "nota", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Etiqueta> etiquetas = new ArrayList<>();
 
     public void updateTitle(String title){
         if (title==null || title.isBlank())throw new RuntimeException("El titulo no puede estar en blanco");
@@ -33,12 +31,7 @@ public class Note{
         if (contenido==null || contenido.isBlank())throw new RuntimeException("El contenido no puede estar en blanco");
         this.contenido=contenido;
     }
-    public void updateEtiquetas(List<Etiqueta> nuevasEtiquetas) {
-        etiquetas.clear();
-        for (Etiqueta etiqueta : nuevasEtiquetas) {
-            etiqueta.setNota(this);
-            etiquetas.add(etiqueta);
-        }
+
     }
 
 
@@ -49,4 +42,4 @@ public class Note{
 
 
 
-}
+
