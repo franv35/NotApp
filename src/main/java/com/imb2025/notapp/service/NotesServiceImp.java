@@ -40,14 +40,9 @@ public class NotesServiceImp implements INotesService {
        if (noteOpt.isPresent())throw new RuntimeException("La nota ya existe");
        Note note=new Note();
         note.updateTitle(request.getTitle());
-        List<Etiqueta> etiquetas = request.getEtiquetas().stream()
-                .map(dto -> {
-                    Etiqueta e = new Etiqueta();
-                    e.setNombre(dto.getNombre());
-                    return e;
-                }).toList();
+
         note.updateContenido(request.getContenido());
-        note.updateEtiquetas(request.getEtiquetas());
+
        noteRepository.save(note);
        return "Nota creada exitosamente";
     }
