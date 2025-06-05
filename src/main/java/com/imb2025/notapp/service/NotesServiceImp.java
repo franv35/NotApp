@@ -3,11 +3,12 @@ package com.imb2025.notapp.service;
 import com.imb2025.notapp.entity.Note;
 
 import java.util.List;
-import java.util.Locale;
 import java.util.Optional;
 
 
+import com.imb2025.notapp.entity.NoteTerminada;
 import com.imb2025.notapp.entity.dto.RegisterRequest;
+import com.imb2025.notapp.repository.NoteTerminadaRepository;
 import com.imb2025.notapp.repository.NotesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,8 @@ public class NotesServiceImp implements INotesService {
 
     @Autowired
     private NotesRepository noteRepository;
+    @Autowired
+    private NoteTerminadaRepository noteTerminadaRepository;
 
     @Override
     public List<Note> findAll() {
@@ -27,9 +30,7 @@ public class NotesServiceImp implements INotesService {
     
     @Override
     public Note findById(Long id) {
-    Note note=findByIdRepository(id);
-
-    return note;
+    return findByIdRepository(id);
     }
 
     @Override
@@ -71,6 +72,25 @@ public class NotesServiceImp implements INotesService {
         note.updateContenido(content);
         noteRepository.save(note);
         return "Se ha editado correctamente el contenido";
+    }
+
+    @Override
+    public List<NoteTerminada> findAllTerminadas() {
+        List<NoteTerminada> notesOpt= noteTerminadaRepository.findAll();
+        if (notesOpt.isEmpty())throw new RuntimeException("todavia no tienes tareas terminadas");
+        return notesOpt;
+    }
+
+    @Override
+    public String notaTerminada(Long id) {
+        Note note=findByIdRepository(id);
+        NoteTerminada noteTerminada=new NoteTerminada();
+        noteTerminada.setTitle(note.getTitle());
+        noteTerminada.setContenido(note.getContenido());
+        noteTerminadaRepository.save(noteTerminada);
+        noteRepository.delete(note);
+
+        return"Borrada con exito";
     }
 
     private Note findByIdRepository(Long id){

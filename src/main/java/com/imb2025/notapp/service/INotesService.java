@@ -3,6 +3,7 @@ package com.imb2025.notapp.service;
 import java.util.List;
 
 import com.imb2025.notapp.entity.Note;
+import com.imb2025.notapp.entity.NoteTerminada;
 import com.imb2025.notapp.entity.dto.RegisterRequest;
 
 public interface INotesService {
@@ -19,4 +20,7 @@ public interface INotesService {
 
 
     String updateContent(Long id, String content);
+    List<NoteTerminada>findAllTerminadas();
+
+    String notaTerminada(Long id);
 }
