@@ -4,17 +4,45 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NotApp</title>
-    <link rel="stylesheet" href="./css/styles.css">
-    <script src="./js/script.js"></script>
+    <link rel="stylesheet" href="./styles.css">
+    <script src="./script.js"></script>
 </head>
 <body>
     <header>
         <nav>
-
+            <div class="navitem">
+                <img src="./img/account_circle_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt="">
+                <a href="#">nombreuser</a>
+            </div>
+            <div class="navitem"></div>
+            <div class="navitem"><img src="./img/settings.svg" alt=""></div>
         </nav>
     </header>
     <main>
-        <div class="container"></div>
+        <div class="aside">
+
+        </div>
+        <div class="container">
+            
+        </div>
+        <div class="aside">
+            <div class="newnote">
+                <a href="#">
+                    <button id="openModal"><img src="./img/new.svg" alt=""></button>
+                </a>
+        </div>
+        <div id="noteModal" class="modal">
+  			<div class="modal-content">
+    		    <span id="closeModal" class="close">&times;</span>
+    		    <h2>Escribir una nota</h2>
+    		    <input type="text" id="modalNoteTitle" placeholder="Título"><br><br>
+    		    <textarea id="modalNoteContent" placeholder="Contenido de la nota"></textarea><br><br>
+    		    <button onclick="saveModalNote()">Guardar</button>
+            </div>
+        </div>
     </main>
+    <footer>
+
+    </footer>
 </body>
 </html>
