@@ -4,7 +4,7 @@ package com.imb2025.notapp.controller;
 import com.imb2025.notapp.entity.Note;
 import com.imb2025.notapp.entity.dto.RegisterRequest;
 import com.imb2025.notapp.service.INotesService;
-import org.apache.coyote.Response;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
