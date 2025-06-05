@@ -1,15 +1,40 @@
 package com.imb2025.notapp.controller;
 
 
+import com.imb2025.notapp.entity.Note;
+import com.imb2025.notapp.entity.dto.RegisterRequest;
 import com.imb2025.notapp.service.INotesService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.apache.coyote.Response;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
-@RequestMapping("/")
+@RequestMapping("/notes")
 public class NoteController {
-    @Autowired
-    private INotesService iNotesService;
-    
+
+    private final INotesService iNotesService;
+
+    public NoteController(INotesService iNotesService) {
+        this.iNotesService = iNotesService;
+    }
+
+    @GetMapping
+    public ResponseEntity<List<Note>> findAll(){
+        return  ResponseEntity.ok(iNotesService.findAll());
+    }
+
+    @PostMapping("/crear")
+    public ResponseEntity<String> createNote(@RequestBody RegisterRequest request){
+    return ResponseEntity.ok(iNotesService.createNote(request));
+    }
+    @GetMapping("/{id}")
+    public ResponseEntity<Note> findById(@PathVariable Long id){
+        return ResponseEntity.ok(iNotesService.findById(id));
+    }
+    @DeleteMapping("/borrar/{id}")
+    public ResponseEntity<String> deleteById(@PathVariable Long id){
+        return ResponseEntity.ok(iNotesService.deleteById(id));
+    }
 }
