@@ -23,23 +23,50 @@ function fetchAndDisplayNotes() {
       notes.forEach(note => {
         const noteElement = document.createElement('div'); //Creo un div por cada nota
         noteElement.classList.add('note'); //Agrego la clase note por cada div creado
+        noteElement.setAttribute('data-id', note.id);
 
         noteElement.innerHTML = `
-          <div class="notetitle">${note.titulo}</div>
+          <div class="notetitle">${note.title}</div>
           <div class="notecontent">${note.contenido}</div>
           <div class="notebottom">
             <div class="notetaggs">etiquetas:</div>
             <div class="noteoptions">
               <a href="#" class="option"><img src="./img/edit.svg" alt="Editar"></a>
-              <a href="#" class="option"><img src="./img/delete.svg" alt="Eliminar"></a>
+              <a href="#" class="option delete-btn"><img src="./img/delete.svg" alt="Eliminar"></a>
               <a href="#" class="option"><img src="./img/check.svg" alt="Confirmar"></a>
             </div>
           </div>
         `;
-
-        container.appendChild(noteElement);
-      });
-    })
+        // Agregar listener al botón de eliminar
+        const deleteBtn = noteElement.querySelector('.delete-btn');
+                if (deleteBtn) {
+                  deleteBtn.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const noteId = noteElement.getAttribute('data-id');
+                    if (confirm('¿Estás seguro de que querés eliminar esta nota?')) {
+                      fetch(`/notes/borrar/${noteId}`, {
+                        method: 'DELETE'
+                      })
+                        .then(response => {
+                          if (!response.ok) {
+                            throw new Error('Error al eliminar la nota');
+                          }
+                          return response.text();
+                        })
+                        .then(data => {
+                          alert('✅ Nota eliminada');
+                          fetchAndDisplayNotes();
+                        })
+                        .catch(error => {
+                          console.error('Error al eliminar:', error);
+                          alert('❌ No se pudo eliminar la nota');
+                        });
+                      }
+                    });
+                  }
+                  container.appendChild(noteElement);
+                });
+        })
     .catch(error => {
       console.error('Error:', error);
       alert('❌ No se pudieron cargar las notas');
@@ -133,6 +160,8 @@ function saveModalNote() {
 
     // Mostrar mensaje al usuario
     alert('✅ Nota guardada con éxito');
+    //Recarga página
+    location.reload();
   })
   .catch(error => {
     console.error('Error al guardar la nota:', error);
