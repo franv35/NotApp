@@ -26,6 +26,7 @@ public class NoteController {
         return  ResponseEntity.ok(iNotesService.findAll());
     }
 
+
     @PostMapping("/crear")
     public ResponseEntity<String> createNote(@RequestBody RegisterRequest request){
     return ResponseEntity.ok(iNotesService.createNote(request));

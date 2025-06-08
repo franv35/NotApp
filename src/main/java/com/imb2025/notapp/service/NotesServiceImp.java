@@ -26,6 +26,7 @@ public class NotesServiceImp implements INotesService {
     public List<Note> findAll() {
         List<Note> notesOpt= noteRepository.findAll();
         if (notesOpt.isEmpty())throw new RuntimeException("lista vacia");
+
         return notesOpt;
     }
     
