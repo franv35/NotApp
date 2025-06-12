@@ -4,6 +4,8 @@ package com.imb2025.notapp.controller;
 import com.imb2025.notapp.entity.Note;
 import com.imb2025.notapp.entity.NoteTerminada;
 import com.imb2025.notapp.entity.dto.RegisterRequest;
+import com.imb2025.notapp.entity.dto.UpdateContentDTO;
+import com.imb2025.notapp.entity.dto.UpdateTitleDTO;
 import com.imb2025.notapp.service.INotesService;
 
 import org.springframework.http.ResponseEntity;
@@ -41,12 +43,12 @@ public class NoteController {
         return ResponseEntity.ok(iNotesService.deleteById(id));
     }
     @PutMapping("/editartitle")
-    public ResponseEntity<String> updateTitle(@RequestBody Long id,String title){
-        return ResponseEntity.ok(iNotesService.updateTitle(id,title));
+    public ResponseEntity<String> updateTitle(@RequestBody UpdateTitleDTO dto){
+        return ResponseEntity.ok(iNotesService.updateTitle(dto.getId(),dto.getTitle()));
     }
     @PutMapping("/editarcontenido")
-    public ResponseEntity<String> updateContent(@RequestBody Long id,String content){
-        return ResponseEntity.ok(iNotesService.updateContent(id,content));
+    public ResponseEntity<String> updateContent(@RequestBody UpdateContentDTO dto){
+        return ResponseEntity.ok(iNotesService.updateContent(dto.getId(),dto.getContent()));
     }
     @GetMapping("/obtenernotasterminadas")
     public ResponseEntity<List<NoteTerminada>> findAllTerminadas(){
