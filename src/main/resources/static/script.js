@@ -200,7 +200,7 @@ document.addEventListener('DOMContentLoaded', function () {
           headers: {
             'Content-Type': 'application/json'
           },
-          body: JSON.stringify({ id: parseInt(noteId), contenido: content })
+          body: JSON.stringify({ id: parseInt(noteId), content: content })
         })
       ])
         .then(responses => {
