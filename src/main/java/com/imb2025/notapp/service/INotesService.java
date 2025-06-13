@@ -20,6 +20,8 @@ public interface INotesService {
 
 
     String updateContent(Long id, String content);
+
+    String updateNote (Long id, String title, String content);
     List<NoteTerminada>findAllTerminadas();
 
     String notaTerminada(Long id);

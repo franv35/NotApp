@@ -69,6 +69,17 @@ public class NotesServiceImp implements INotesService {
         return "Se ha editado correctamente el titulo";
     }
 
+    @Override
+    public String updateNote(Long id, String title, String content) {
+        Note note = findByIdRepository(id);
+        note.updateContenido(content);
+        note.updateTitle(title);
+        noteRepository.save(note);
+        return "Se ha editado correctamente la nota";
+
+    }
+
+
 
 
     @Override

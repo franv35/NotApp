@@ -5,6 +5,7 @@ import com.imb2025.notapp.entity.Note;
 import com.imb2025.notapp.entity.NoteTerminada;
 import com.imb2025.notapp.entity.dto.RegisterRequest;
 import com.imb2025.notapp.entity.dto.UpdateContentDTO;
+import com.imb2025.notapp.entity.dto.UpdateNoteDTO;
 import com.imb2025.notapp.entity.dto.UpdateTitleDTO;
 import com.imb2025.notapp.service.INotesService;
 
@@ -49,6 +50,11 @@ public class NoteController {
     @PutMapping("/editarcontenido")
     public ResponseEntity<String> updateContent(@RequestBody UpdateContentDTO dto){
         return ResponseEntity.ok(iNotesService.updateContent(dto.getId(),dto.getContent()));
+    }
+
+    @PutMapping("/editar")
+    public ResponseEntity<String> updateNote (@RequestBody UpdateNoteDTO dto){
+        return ResponseEntity.ok(iNotesService.updateNote(dto.getId(), dto.getTitle(), dto.getContent()));
     }
     @GetMapping("/obtenernotasterminadas")
     public ResponseEntity<List<NoteTerminada>> findAllTerminadas(){
