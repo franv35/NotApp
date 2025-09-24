@@ -24,12 +24,10 @@ public class NotesServiceImp implements INotesService {
 
     @Override
     public List<Note> findAll() {
-        List<Note> notesOpt= noteRepository.findAll();
-        if (notesOpt.isEmpty())throw new RuntimeException("lista vacia");
-
-        return notesOpt;
+        return noteRepository.findAll(); // sin lanzar excepción
     }
-    
+
+
     @Override
     public Note findById(Long id) {
     return findByIdRepository(id);
@@ -92,10 +90,9 @@ public class NotesServiceImp implements INotesService {
 
     @Override
     public List<NoteTerminada> findAllTerminadas() {
-        List<NoteTerminada> notesOpt= noteTerminadaRepository.findAll();
-        if (notesOpt.isEmpty())throw new RuntimeException("todavia no tienes tareas terminadas");
-        return notesOpt;
+        return noteTerminadaRepository.findAll(); // sin lanzar excepción
     }
+
 
     @Override
     public String notaTerminada(Long id) {
@@ -113,6 +110,13 @@ public class NotesServiceImp implements INotesService {
         return noteRepository.findById(id).orElseThrow(()->new RuntimeException("La nota no existe"));
     }
 
+    @Override
+    public String deleteTerminadaById(Long id) {
+        NoteTerminada nota = noteTerminadaRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("La nota terminada no existe"));
+        noteTerminadaRepository.delete(nota);
+        return "Nota terminada eliminada";
+    }
 
 
 

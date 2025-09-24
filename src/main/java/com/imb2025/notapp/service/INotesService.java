@@ -25,4 +25,7 @@ public interface INotesService {
     List<NoteTerminada>findAllTerminadas();
 
     String notaTerminada(Long id);
+
+    String deleteTerminadaById(Long id);
+
 }

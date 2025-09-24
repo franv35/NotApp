@@ -2,19 +2,17 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Registro</title>
-  <link rel="stylesheet" href="css/stylestomi.css">
+  <title>Registro de Usuario</title>
+  <link rel="stylesheet" href="./styles.css">
+  <script src="./register.js"></script>
 </head>
 <body>
-  <div class="contenedor">
-    <h2>Crear Cuenta</h2>
-    <form action="/api/registro" method="post">
-      <input type="text" id="usuario" name="usuario" placeholder="Usuario" required>
-      <input type="password" id="clave" name="clave" placeholder="Contraseña" required>
-      <button type="submit">Registrarme</button>
-    </form>
-    <p>¿Ya tenés cuenta? <a href="login.html">Iniciar sesión</a></p>
-  </div>
+<main class="auth-container">
+  <h2>Crear cuenta</h2>
+  <input type="text" id="username" placeholder="Nombre de usuario">
+  <input type="text" id="nombreCompleto" placeholder="Nombre completo">
+  <input type="password" id="password" placeholder="Contraseña">
+  <button id="registerBtn">Registrarse</button>
+</main>
 </body>
 </html>

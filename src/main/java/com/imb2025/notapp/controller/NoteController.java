@@ -64,4 +64,9 @@ public class NoteController {
     public ResponseEntity<String> notaTerminada(@PathVariable Long id){
         return ResponseEntity.ok(iNotesService.notaTerminada(id));
     }
+    @DeleteMapping("/borrarterminada/{id}")
+    public ResponseEntity<String> deleteTerminada(@PathVariable Long id) {
+        return ResponseEntity.ok(iNotesService.deleteTerminadaById(id));
+    }
+
 }

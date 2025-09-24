@@ -5,20 +5,45 @@ document.addEventListener('DOMContentLoaded', function () {
   fetchAndDisplayFinishedNotes();
 });
 
+
+document.addEventListener('DOMContentLoaded', function () {
+  const usuario = JSON.parse(localStorage.getItem('usuarioLogeado'));
+  const nombreHeader = document.getElementById('nombreUsuarioHeader');
+
+  if (usuario && nombreHeader) {
+    nombreHeader.textContent = usuario.nombreCompleto;
+  }
+
+  // Ya existente:
+  fetchAndDisplayNotes();
+  fetchAndDisplayFinishedNotes();
+});
+
+
 function fetchAndDisplayNotes() {
   fetch('/notes')
-    .then(response => {
+    .then(async response => {
       if (!response.ok) {
-        if (response.status === 505) {
-          throw new Error('No hay notas guardadas');
+        if (response.status === 404 || response.status === 505) {
+          return []; // sin notas, no es error
         }
         throw new Error('Error al obtener las notas');
       }
-      return response.json();
+
+      try {
+        return await response.json();
+      } catch (e) {
+        return []; // si no hay JSON válido, asumimos lista vacía
+      }
     })
     .then(notes => {
       const container = document.querySelector('.container');
       container.innerHTML = '';
+
+      if (!notes || notes.length === 0) {
+        container.innerHTML = `<p class="no-notes-msg">No hay notas activas</p>`;
+        return;
+      }
 
       notes.forEach(note => {
         const noteElement = createNoteElement(note);
@@ -26,22 +51,26 @@ function fetchAndDisplayNotes() {
       });
     })
     .catch(error => {
-      console.error('Error:', error);
-      alert('❌ No se pudieron cargar las notas');
+      console.error('Error al cargar notas:', error);
+      // Solo mostrar alert si el error no fue por lista vacía
+      if (error.message !== 'Error al obtener las notas') return;
+      alert('❌ Ocurrió un problema al cargar las notas. Intenta recargar la página.');
     });
 }
 
+
+
 function fetchAndDisplayFinishedNotes() {
   fetch('/notes/obtenernotasterminadas')
-    .then(response => {
-      if (!response.ok) {
-        throw new Error('Error al obtener las notas terminadas');
-      }
-      return response.json();
-    })
+    .then(response => response.json())
     .then(notes => {
       const container = document.querySelector('.container.terminadas');
       container.innerHTML = '';
+
+      if (!notes || notes.length === 0) {
+        container.innerHTML = `<p class="no-notes-msg">No hay notas terminadas</p>`;
+        return;
+      }
 
       notes.forEach(note => {
         const noteElement = createNoteElement(note, true);
@@ -49,10 +78,11 @@ function fetchAndDisplayFinishedNotes() {
       });
     })
     .catch(error => {
-      console.error('Error:', error);
-      alert('❌ No se pudieron cargar las notas terminadas');
+      console.error('Error al cargar notas terminadas:', error);
+      alert('❌ No se pudieron cargar las notas terminadas. Intenta recargar la página.');
     });
 }
+
 
 function createNoteElement(note, isFinished = false) {
   const noteElement = document.createElement('div');
@@ -69,11 +99,14 @@ function createNoteElement(note, isFinished = false) {
           <a href="#" class="option edit-btn"><img src="./img/edit.svg" alt="Editar"></a>
           <a href="#" class="option delete-btn"><img src="./img/delete.svg" alt="Eliminar"></a>
           <a href="#" class="option finish-btn"><img src="./img/check.svg" alt="Confirmar"></a>
-        ` : ''}
+        ` : `
+          <a href="#" class="option delete-terminada-btn"><img src="./img/delete.svg" alt="Eliminar nota terminada"></a>
+        `}
       </div>
     </div>
   `;
 
+  // 🔧 Acciones para notas activas
   if (!isFinished) {
     const deleteBtn = noteElement.querySelector('.delete-btn');
     if (deleteBtn) {
@@ -81,16 +114,12 @@ function createNoteElement(note, isFinished = false) {
         e.preventDefault();
         const noteId = noteElement.getAttribute('data-id');
         if (confirm('¿Estás seguro de que querés eliminar esta nota?')) {
-          fetch(`/notes/borrar/${noteId}`, {
-            method: 'DELETE'
-          })
+          fetch(`/notes/borrar/${noteId}`, { method: 'DELETE' })
             .then(response => {
-              if (!response.ok) {
-                throw new Error('Error al eliminar la nota');
-              }
+              if (!response.ok) throw new Error('Error al eliminar la nota');
               return response.text();
             })
-            .then(data => {
+            .then(() => {
               alert('✅ Nota eliminada');
               fetchAndDisplayNotes();
               fetchAndDisplayFinishedNotes();
@@ -108,19 +137,20 @@ function createNoteElement(note, isFinished = false) {
       finishBtn.addEventListener('click', function (e) {
         e.preventDefault();
         const noteId = noteElement.getAttribute('data-id');
-        fetch(`/notes/guardarnotaterminada/${noteId}`, {
-          method: 'POST'
-        })
+
+        fetch(`/notes/guardarnotaterminada/${noteId}`, { method: 'POST' })
           .then(response => {
-            if (!response.ok) {
-              throw new Error('Error al marcar como terminada');
-            }
+            if (!response.ok) throw new Error('Error al marcar como terminada');
             return response.text();
           })
-          .then(data => {
+          .then(() => {
             alert('✅ Nota marcada como terminada');
-            fetchAndDisplayNotes();
-            fetchAndDisplayFinishedNotes();
+
+            // 🔄 Obtener la nota actualizada desde backend
+            const terminadasContainer = document.querySelector('.container.terminadas');
+            const nuevaNotaTerminada = createNoteElement(note, true);
+            terminadasContainer.appendChild(nuevaNotaTerminada);
+            noteElement.remove(); // elimina la nota activa del DOM
           })
           .catch(error => {
             console.error('Error al marcar como terminada:', error);
@@ -145,8 +175,35 @@ function createNoteElement(note, isFinished = false) {
     }
   }
 
+  // 🔧 Acciones para notas terminadas
+  if (isFinished) {
+    const deleteBtn = noteElement.querySelector('.delete-terminada-btn');
+    if (deleteBtn) {
+      deleteBtn.addEventListener('click', function (e) {
+        e.preventDefault();
+        const noteId = noteElement.getAttribute('data-id');
+        if (confirm('¿Eliminar esta nota terminada?')) {
+          fetch(`/notes/borrarterminada/${noteId}`, { method: 'DELETE' })
+            .then(response => {
+              if (!response.ok) throw new Error('Error al eliminar nota terminada');
+              return response.text();
+            })
+            .then(() => {
+              alert('✅ Nota terminada eliminada');
+              fetchAndDisplayFinishedNotes();
+            })
+            .catch(error => {
+              console.error('Error al eliminar terminada:', error);
+              alert('❌ No se pudo eliminar la nota terminada');
+            });
+        }
+      });
+    }
+  }
+
   return noteElement;
 }
+
 
 // APARICIÓN DE VENTANA EMERGENTE (MODAL)
 
@@ -157,11 +214,12 @@ document.addEventListener('DOMContentLoaded', function () {
   const saveBtn = document.getElementById('saveNoteBtn');
 
   openBtn.addEventListener('click', function () {
-    modal.style.display = 'block';
+    modal.style.display = 'flex'; // ahora sí aparece
     document.getElementById('modalNoteTitle').value = '';
     document.getElementById('modalNoteContent').value = '';
     delete saveBtn.dataset.editing;
   });
+
 
   closeBtn.addEventListener('click', function () {
     modal.style.display = 'none';
@@ -174,6 +232,7 @@ document.addEventListener('DOMContentLoaded', function () {
       delete saveBtn.dataset.editing;
     }
   });
+
 
   saveBtn.addEventListener('click', function () {
     const title = document.getElementById('modalNoteTitle').value;
@@ -190,16 +249,12 @@ document.addEventListener('DOMContentLoaded', function () {
       Promise.all([
         fetch('/notes/editartitle', {
           method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json'
-          },
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ id: parseInt(noteId), title: title })
         }),
         fetch('/notes/editarcontenido', {
           method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json'
-          },
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ id: parseInt(noteId), content: content })
         })
       ])
@@ -219,16 +274,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
     } else {
       // Modo creación
-      const noteData = {
-        title,
-        contenido: content
-      };
+      const noteData = { title, contenido: content };
 
       fetch('/notes/crear', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(noteData)
       })
         .then(response => {

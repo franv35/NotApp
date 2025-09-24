@@ -12,38 +12,37 @@
         <nav>
             <div class="navitem">
                 <img src="./img/account_circle_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt="">
-                <a href="#">nombreuser</a>
+                <a href="#" id="nombreUsuarioHeader">nombreuser</a>
             </div>
             <div class="navitem"></div>
             <div class="navitem"><img src="./img/settings.svg" alt=""></div>
         </nav>
     </header>
     <main>
-        <div class="aside">
-
-        </div>
+        <!-- Columna central -->
         <div class="container">
-            
+            <h2>Notas Activas</h2>
         </div>
-        <div class="container terminadas">
 
-        </div>
-        <div class="aside">
-            <div class="newnote">
-                <a href="#">
-                    <button id="openModal"><img src="./img/new.svg" alt=""></button>
-                </a>
-        </div>
-        <div id="noteModal" class="modal">
-  			<div class="modal-content">
-    		    <span id="closeModal" class="close">&times;</span>
-    		    <h2>Escribir una nota</h2>
-    		    <input type="text" id="modalNoteTitle" placeholder="Título"><br><br>
-    		    <textarea id="modalNoteContent" placeholder="Contenido de la nota"></textarea><br><br>
-    		    <button id="saveNoteBtn">Guardar</button>
-            </div>
+        <div class="container terminadas">
+            <h2>Notas Terminadas</h2>
         </div>
     </main>
+
+    <!-- Botón flotante fuera del grid -->
+    <div class="newnote" id="openModal">+</div>
+
+    <!-- Modal -->
+    <div id="noteModal" class="modal">
+        <div class="modal-content">
+            <span id="closeModal" class="close">&times;</span>
+            <h2>Escribir una nota</h2>
+            <input type="text" id="modalNoteTitle" placeholder="Título">
+            <textarea id="modalNoteContent" placeholder="Contenido de la nota"></textarea>
+            <button id="saveNoteBtn">Guardar</button>
+        </div>
+    </div>
+
     <footer>
 
     </footer>
