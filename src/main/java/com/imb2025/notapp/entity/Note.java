@@ -22,6 +22,14 @@ public class Note{
     private String title;
     private String contenido;
 
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(
+            name = "note_etiquetas",
+            joinColumns = @JoinColumn(name = "note_id"),
+            inverseJoinColumns = @JoinColumn(name = "etiqueta_id")
+    )
+    private List<Etiqueta> etiquetas = new ArrayList<>();
+
 
     public void updateTitle(String title){
         if (title==null || title.isBlank())throw new RuntimeException("El titulo no puede estar en blanco");

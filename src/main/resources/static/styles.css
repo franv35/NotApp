@@ -229,3 +229,63 @@ footer {
   padding: 1rem;
   margin-top: auto;
 }
+
+/* Distribución vertical completa */
+main.auth-wrapper {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center; /* centra horizontalmente */
+  align-items: center;     /* centra verticalmente */
+  background-color: var(--color-fondo);
+}
+
+/* Tarjeta compacta */
+.auth-container {
+  width: 100%;
+  max-width: 320px;
+  background-color: var(--color-blanco);
+  padding: 1.2rem 1rem;
+  border-radius: 0.8rem;
+  box-shadow: var(--sombra-suave);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Título */
+.auth-container h2 {
+  margin-bottom: 0.8rem;
+  font-size: 1.3rem;
+  color: var(--color-primario);
+}
+
+/* Inputs */
+.auth-container input {
+  width: 100%;
+  padding: 0.5rem 0.6rem;
+  margin-bottom: 0.4rem;
+  border-radius: 0.4rem;
+  border: 1px solid #cbd5e1;
+  font-size: 0.9rem;
+}
+
+/* Botón */
+.auth-container button {
+  width: 100%;
+  padding: 0.6rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  background-color: var(--color-primario);
+  color: var(--color-blanco);
+  border: none;
+  border-radius: 0.4rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-top: 0.6rem;
+}
+
+.auth-container button:hover {
+  background-color: #4338ca;
+}
+

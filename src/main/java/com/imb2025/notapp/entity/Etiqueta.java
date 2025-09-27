@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import java.util.List;
+import java.util.ArrayList;
 
 @Entity
 @Data
@@ -13,7 +15,9 @@ public class Etiqueta {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(unique = true, nullable = false)
     private String nombre;
-
+    @ManyToMany(mappedBy = "etiquetas")
+    private List<Note> notas = new ArrayList<>();
 
 }
