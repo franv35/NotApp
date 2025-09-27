@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.util.List;
 import java.util.ArrayList;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Data
@@ -18,6 +19,7 @@ public class Etiqueta {
     @Column(unique = true, nullable = false)
     private String nombre;
     @ManyToMany(mappedBy = "etiquetas")
+    @JsonIgnore
     private List<Note> notas = new ArrayList<>();
 
 }

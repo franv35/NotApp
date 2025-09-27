@@ -93,22 +93,54 @@ function createNoteElement(note, isFinished = false) {
     <div class="notetitle">${note.title}</div>
     <div class="notecontent">${note.contenido}</div>
     <div class="notebottom">
-      <div class="notetaggs">etiquetas:</div>
+     <div class="notetaggs">
+       etiquetas:
+       <span class="etiquetas-list">
+         ${note.etiquetas?.map(e => `<span class="etiqueta-chip">${e.nombre}</span>`).join('') || ''}
+       </span>
+       ${!isFinished ? `<input type="text" class="etiqueta-input" placeholder="Agregar etiqueta">` : ''}
+     </div>
       <div class="noteoptions">
-        ${!isFinished ? `
-          <a href="#" class="option edit-btn"><img src="./img/edit.svg" alt="Editar"></a>
-          <a href="#" class="option delete-btn"><img src="./img/delete.svg" alt="Eliminar"></a>
-          <a href="#" class="option finish-btn"><img src="./img/check.svg" alt="Confirmar"></a>
-        ` : `
-          <a href="#" class="option delete-terminada-btn"><img src="./img/delete.svg" alt="Eliminar nota terminada"></a>
-        `}
+        <a href="#" class="option edit-btn"><img src="./img/edit.svg" alt="Editar"></a>
+        <a href="#" class="option delete-btn"><img src="./img/delete.svg" alt="Eliminar"></a>
+        <a href="#" class="option finish-btn"><img src="./img/check.svg" alt="Confirmar"></a>
       </div>
     </div>
   `;
 
+
   // 🔧 Acciones para notas activas
   if (!isFinished) {
     const deleteBtn = noteElement.querySelector('.delete-btn');
+    const etiquetaInput = noteElement.querySelector('.etiqueta-input');
+    if (etiquetaInput) {
+      etiquetaInput.addEventListener('keypress', function (e) {
+        if (e.key === 'Enter') {
+          const etiqueta = etiquetaInput.value.trim();
+          if (!etiqueta) return;
+
+          const noteId = noteElement.getAttribute('data-id');
+          fetch(`/notes/agregaretiqueta/${noteId}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(etiqueta)
+          })
+            .then(res => {
+              if (!res.ok) throw new Error('Error al agregar etiqueta');
+              return res.json();
+            })
+            .then(updatedNote => {
+              alert('✅ Etiqueta agregada');
+              etiquetaInput.value = ''; // limpia el input
+              fetchAndDisplayNotes();   // refresca la vista
+            })
+            .catch(error => {
+              console.error('Error al agregar etiqueta:', error);
+              alert('❌ No se pudo agregar la etiqueta');
+            });
+        }
+      });
+    }
     if (deleteBtn) {
       deleteBtn.addEventListener('click', function (e) {
         e.preventDefault();

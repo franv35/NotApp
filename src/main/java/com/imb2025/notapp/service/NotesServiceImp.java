@@ -118,6 +118,27 @@ public class NotesServiceImp implements INotesService {
         return "Nota terminada eliminada";
     }
 
+    @Autowired
+    private EtiquetaService etiquetaService;
+
+    @Override
+    public Note agregarEtiquetaANota(Long noteId, String nombreEtiqueta) {
+        Note note = findById(noteId);
+
+        Etiqueta etiqueta = etiquetaService.findByNombre(nombreEtiqueta)
+                .orElseGet(() -> {
+                    Etiqueta nueva = new Etiqueta();
+                    nueva.setNombre(nombreEtiqueta);
+                    return etiquetaService.save(nueva);
+                });
+
+        if (!note.getEtiquetas().contains(etiqueta)) {
+            note.getEtiquetas().add(etiqueta);
+            noteRepository.save(note);
+        }
+
+        return note;
+    }
 
 
 }

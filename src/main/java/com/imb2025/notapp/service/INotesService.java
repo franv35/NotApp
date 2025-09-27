@@ -28,4 +28,6 @@ public interface INotesService {
 
     String deleteTerminadaById(Long id);
 
+    Note agregarEtiquetaANota(Long noteId, String nombreEtiqueta);
+
 }

@@ -289,3 +289,17 @@ main.auth-wrapper {
   background-color: #4338ca;
 }
 
+.etiquetas-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  margin-top: 0.3rem;
+}
+
+.etiqueta-chip {
+  background-color: var(--color-acento);
+  color: var(--color-blanco);
+  padding: 0.2rem 0.6rem;
+  border-radius: 0.5rem;
+  font-size: 0.75rem;
+}
