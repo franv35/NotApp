@@ -37,44 +37,41 @@ function fetchAndDisplayNotes() {
       }
     })
     .then(notes => {
-      const container = document.querySelector('.container');
-      container.innerHTML = '';
+      const activasContainer = document.querySelector('.activas-container');
+      activasContainer.innerHTML = '';
 
       if (!notes || notes.length === 0) {
-        container.innerHTML = `<p class="no-notes-msg">No hay notas activas</p>`;
+        activasContainer.innerHTML = `<p class="no-notes-msg">No hay notas activas</p>`;
         return;
       }
 
       notes.forEach(note => {
-        const noteElement = createNoteElement(note);
-        container.appendChild(noteElement);
+        const noteElement = createNoteElement(note, false); // false = nota activa
+        activasContainer.appendChild(noteElement);
       });
     })
     .catch(error => {
       console.error('Error al cargar notas:', error);
-      // Solo mostrar alert si el error no fue por lista vacía
       if (error.message !== 'Error al obtener las notas') return;
       alert('❌ Ocurrió un problema al cargar las notas. Intenta recargar la página.');
     });
 }
 
-
-
 function fetchAndDisplayFinishedNotes() {
   fetch('/notes/obtenernotasterminadas')
     .then(response => response.json())
     .then(notes => {
-      const container = document.querySelector('.container.terminadas');
-      container.innerHTML = '';
+      const terminadasContainer = document.querySelector('.terminadas-container');
+      terminadasContainer.innerHTML = '';
 
       if (!notes || notes.length === 0) {
-        container.innerHTML = `<p class="no-notes-msg">No hay notas terminadas</p>`;
+        terminadasContainer.innerHTML = `<p class="no-notes-msg">No hay notas terminadas</p>`;
         return;
       }
 
       notes.forEach(note => {
-        const noteElement = createNoteElement(note, true);
-        container.appendChild(noteElement);
+        const noteElement = createNoteElement(note, true); // true = nota terminada
+        terminadasContainer.appendChild(noteElement);
       });
     })
     .catch(error => {
@@ -82,7 +79,6 @@ function fetchAndDisplayFinishedNotes() {
       alert('❌ No se pudieron cargar las notas terminadas. Intenta recargar la página.');
     });
 }
-
 
 function createNoteElement(note, isFinished = false) {
   const noteElement = document.createElement('div');
@@ -177,12 +173,8 @@ function createNoteElement(note, isFinished = false) {
           })
           .then(() => {
             alert('✅ Nota marcada como terminada');
-
-            // 🔄 Obtener la nota actualizada desde backend
-            const terminadasContainer = document.querySelector('.container.terminadas');
-            const nuevaNotaTerminada = createNoteElement(note, true);
-            terminadasContainer.appendChild(nuevaNotaTerminada);
-            noteElement.remove(); // elimina la nota activa del DOM
+            fetchAndDisplayNotes();           // refresca activas
+            fetchAndDisplayFinishedNotes();   // refresca terminadas
           })
           .catch(error => {
             console.error('Error al marcar como terminada:', error);
