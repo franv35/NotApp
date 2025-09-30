@@ -1,17 +1,39 @@
 // OBTENER Y MOSTRAR NOTAS EXISTENTES
 
 document.addEventListener('DOMContentLoaded', function () {
-  fetchAndDisplayNotes();
-  fetchAndDisplayFinishedNotes();
-});
-
-
-document.addEventListener('DOMContentLoaded', function () {
   const usuario = JSON.parse(localStorage.getItem('usuarioLogeado'));
-  const nombreHeader = document.getElementById('nombreUsuarioHeader');
 
-  if (usuario && nombreHeader) {
+  if (!usuario) {
+    window.location.href = 'register.html';
+    return;
+  }
+
+  const nombreHeader = document.getElementById('nombreUsuarioHeader');
+  if (nombreHeader && usuario?.nombreCompleto) {
     nombreHeader.textContent = usuario.nombreCompleto;
+  }
+
+  const dropdownMenu = document.getElementById('usuarioDropdownMenu');
+
+  if (nombreHeader && dropdownMenu) {
+    nombreHeader.addEventListener('click', function (e) {
+      e.preventDefault();
+      dropdownMenu.classList.toggle('visible');
+    });
+
+    // Cierra el menú si se hace clic fuera
+    document.addEventListener('click', function (e) {
+      if (!e.target.closest('.usuario-dropdown')) {
+        dropdownMenu.classList.remove('visible');
+      }
+    });
+  }
+  const logoutBtn = document.getElementById('logoutBtn');
+  if (logoutBtn) {
+    logoutBtn.addEventListener('click', function () {
+      localStorage.removeItem('usuarioLogeado');
+      window.location.href = 'login.html';
+    });
   }
 
   fetchAndDisplayNotes();

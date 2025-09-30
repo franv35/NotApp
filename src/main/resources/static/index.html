@@ -8,17 +8,20 @@
     <script src="./script.js"></script>
 </head>
 <body>
-    <header>
-        <nav>
-            <div class="navitem">
-                <img src="./img/account_circle_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt="">
-                <a href="#" id="nombreUsuarioHeader">nombreuser</a>
+<header>
+    <nav>
+        <div class="navitem usuario-dropdown">
+            <img src="./img/account_circle_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt="">
+            <a href="#" id="nombreUsuarioHeader" class="usuario-nombre">nombreuser</a>
+            <div class="dropdown-menu" id="usuarioDropdownMenu">
+                <button id="logoutBtn">Cerrar sesión</button>
             </div>
-            <div class="navitem"></div>
-            <div class="navitem"><img src="./img/settings.svg" alt=""></div>
-        </nav>
-    </header>
-    <main>
+        </div>
+        <div class="navitem"></div>
+        <div class="navitem"><img src="./img/settings.svg" alt=""></div>
+    </nav>
+</header>
+<main>
         <div class="container activas-container">
             <h2>Notas Activas</h2>
         </div>
