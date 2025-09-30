@@ -12,7 +12,4 @@ import lombok.NoArgsConstructor;
 public class RegisterRequest {
     private String title;
     private String contenido;
-
-
-
 }

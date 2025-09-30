@@ -269,22 +269,16 @@ document.addEventListener('DOMContentLoaded', function () {
 
     if (noteId) {
       // Modo edición
-      Promise.all([
-        fetch('/notes/editartitle', {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ id: parseInt(noteId), title: title })
-        }),
-        fetch('/notes/editarcontenido', {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ id: parseInt(noteId), content: content })
+      fetch('/notes/editar', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: parseInt(noteId), title, content })
+      })
+        .then(response => {
+          if (!response.ok) throw new Error('Error al editar la nota');
+          return response.text();
         })
-      ])
-        .then(responses => {
-          if (responses.some(res => !res.ok)) {
-            throw new Error('Uno o más cambios no fueron aplicados');
-          }
+        .then(() => {
           alert('✅ Nota actualizada');
           modal.style.display = 'none';
           delete saveBtn.dataset.editing;
@@ -294,7 +288,6 @@ document.addEventListener('DOMContentLoaded', function () {
           console.error('Error al editar nota:', error);
           alert('❌ No se pudo editar la nota');
         });
-
     } else {
       // Modo creación
       const noteData = { title, contenido: content };

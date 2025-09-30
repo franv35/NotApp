@@ -47,11 +47,12 @@ nav {
 .navitem img {
   height: 28px;
   filter: brightness(0) invert(1);
+  filter: brightness(0) saturate(100%) invert(40%) sepia(100%) saturate(600%) hue-rotate(120deg);
 }
 
 a {
   text-decoration: none;
-  color: var(--color-texto);
+  color: var(--color-acento);
   font-weight: 500;
 }
 
