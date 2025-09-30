@@ -39,7 +39,7 @@ function fetchAndDisplayNotes() {
       activasContainer.innerHTML = '';
 
       if (!notes || notes.length === 0) {
-        activasContainer.innerHTML = `<p class="no-notes-msg">No hay notas activas</p>`;
+        activasContainer.innerHTML = `<p class="mensaje-vacio">No hay notas activas</p>`;
         return;
       }
 
@@ -64,7 +64,7 @@ function fetchAndDisplayFinishedNotes() {
       terminadasContainer.innerHTML = '';
 
       if (!notes || notes.length === 0) {
-        terminadasContainer.innerHTML = `<p class="no-notes-msg">No hay notas terminadas</p>`;
+        terminadasContainer.innerHTML = `<p class="mensaje-vacio">No hay notas terminadas</p>`;
         return;
       }
 
