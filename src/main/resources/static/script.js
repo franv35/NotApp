@@ -14,18 +14,16 @@ document.addEventListener('DOMContentLoaded', function () {
     nombreHeader.textContent = usuario.nombreCompleto;
   }
 
-  // Ya existente:
   fetchAndDisplayNotes();
   fetchAndDisplayFinishedNotes();
 });
-
 
 function fetchAndDisplayNotes() {
   fetch('/notes')
     .then(async response => {
       if (!response.ok) {
         if (response.status === 404 || response.status === 505) {
-          return []; // sin notas, no es error
+          return [];
         }
         throw new Error('Error al obtener las notas');
       }
@@ -33,7 +31,7 @@ function fetchAndDisplayNotes() {
       try {
         return await response.json();
       } catch (e) {
-        return []; // si no hay JSON válido, asumimos lista vacía
+        return [];
       }
     })
     .then(notes => {
@@ -46,7 +44,7 @@ function fetchAndDisplayNotes() {
       }
 
       notes.forEach(note => {
-        const noteElement = createNoteElement(note, false); // false = nota activa
+        const noteElement = createNoteElement(note, false);
         activasContainer.appendChild(noteElement);
       });
     })
@@ -61,6 +59,7 @@ function fetchAndDisplayFinishedNotes() {
   fetch('/notes/obtenernotasterminadas')
     .then(response => response.json())
     .then(notes => {
+      console.log('Notas terminadas:', notes);
       const terminadasContainer = document.querySelector('.terminadas-container');
       terminadasContainer.innerHTML = '';
 
@@ -70,7 +69,7 @@ function fetchAndDisplayFinishedNotes() {
       }
 
       notes.forEach(note => {
-        const noteElement = createNoteElement(note, true); // true = nota terminada
+        const noteElement = createNoteElement(note, true);
         terminadasContainer.appendChild(noteElement);
       });
     })
@@ -89,23 +88,26 @@ function createNoteElement(note, isFinished = false) {
     <div class="notetitle">${note.title}</div>
     <div class="notecontent">${note.contenido}</div>
     <div class="notebottom">
-     <div class="notetaggs">
-       etiquetas:
-       <span class="etiquetas-list">
-         ${note.etiquetas?.map(e => `<span class="etiqueta-chip">${e.nombre}</span>`).join('') || ''}
-       </span>
-       ${!isFinished ? `<input type="text" class="etiqueta-input" placeholder="Agregar etiqueta">` : ''}
-     </div>
+      <div class="notetaggs">
+        etiquetas:
+        <span class="etiquetas-list">
+          ${note.etiquetas?.map(e => `<span class="etiqueta-chip">${e.nombre}</span>`).join('') || ''}
+        </span>
+        ${!isFinished ? `<input type="text" class="etiqueta-input" placeholder="Agregar etiqueta">` : ''}
+      </div>
       <div class="noteoptions">
-        <a href="#" class="option edit-btn"><img src="./img/edit.svg" alt="Editar"></a>
-        <a href="#" class="option delete-btn"><img src="./img/delete.svg" alt="Eliminar"></a>
-        <a href="#" class="option finish-btn"><img src="./img/check.svg" alt="Confirmar"></a>
+        ${!isFinished ? `
+          <a href="#" class="option edit-btn"><img src="./img/edit.svg" alt="Editar"></a>
+          <a href="#" class="option delete-btn"><img src="./img/delete.svg" alt="Eliminar nota activa"></a>
+          <a href="#" class="option finish-btn"><img src="./img/check.svg" alt="Confirmar como terminada"></a>
+        ` : `
+          <a href="#" class="option delete-terminada-btn"><img src="./img/delete.svg" alt="Eliminar nota terminada"></a>
+        `}
       </div>
     </div>
   `;
 
-
-  // 🔧 Acciones para notas activas
+  //Acciones para notas activas
   if (!isFinished) {
     const deleteBtn = noteElement.querySelector('.delete-btn');
     const etiquetaInput = noteElement.querySelector('.etiqueta-input');
@@ -173,8 +175,8 @@ function createNoteElement(note, isFinished = false) {
           })
           .then(() => {
             alert('✅ Nota marcada como terminada');
-            fetchAndDisplayNotes();           // refresca activas
-            fetchAndDisplayFinishedNotes();   // refresca terminadas
+            fetchAndDisplayNotes();
+            fetchAndDisplayFinishedNotes();
           })
           .catch(error => {
             console.error('Error al marcar como terminada:', error);
@@ -199,7 +201,7 @@ function createNoteElement(note, isFinished = false) {
     }
   }
 
-  // 🔧 Acciones para notas terminadas
+  //Acciones para notas terminadas
   if (isFinished) {
     const deleteBtn = noteElement.querySelector('.delete-terminada-btn');
     if (deleteBtn) {
@@ -228,8 +230,7 @@ function createNoteElement(note, isFinished = false) {
   return noteElement;
 }
 
-
-// APARICIÓN DE VENTANA EMERGENTE (MODAL)
+// MODAL
 
 document.addEventListener('DOMContentLoaded', function () {
   const modal = document.getElementById('noteModal');
@@ -244,7 +245,6 @@ document.addEventListener('DOMContentLoaded', function () {
     delete saveBtn.dataset.editing;
   });
 
-
   closeBtn.addEventListener('click', function () {
     modal.style.display = 'none';
     delete saveBtn.dataset.editing;
@@ -256,7 +256,6 @@ document.addEventListener('DOMContentLoaded', function () {
       delete saveBtn.dataset.editing;
     }
   });
-
 
   saveBtn.addEventListener('click', function () {
     const title = document.getElementById('modalNoteTitle').value;

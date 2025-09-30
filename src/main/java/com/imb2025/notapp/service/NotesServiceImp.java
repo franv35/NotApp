@@ -2,6 +2,7 @@ package com.imb2025.notapp.service;
 
 import com.imb2025.notapp.entity.Etiqueta;
 import com.imb2025.notapp.entity.Note;
+import java.util.ArrayList;
 
 import java.util.List;
 import java.util.Optional;
@@ -96,14 +97,20 @@ public class NotesServiceImp implements INotesService {
 
     @Override
     public String notaTerminada(Long id) {
-        Note note=findByIdRepository(id);
-        NoteTerminada noteTerminada=new NoteTerminada();
+        Note note = findByIdRepository(id);
+
+        NoteTerminada noteTerminada = new NoteTerminada();
         noteTerminada.setTitle(note.getTitle());
         noteTerminada.setContenido(note.getContenido());
+
+        //Copiar etiquetas si existen
+        if (note.getEtiquetas() != null && !note.getEtiquetas().isEmpty()) {
+            noteTerminada.setEtiquetas(new ArrayList<>(note.getEtiquetas()));
+        }
         noteTerminadaRepository.save(noteTerminada);
         noteRepository.delete(note);
 
-        return"Borrada con exito";
+        return "Borrada con éxito";
     }
 
     private Note findByIdRepository(Long id){
