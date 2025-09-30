@@ -35,6 +35,32 @@ document.addEventListener('DOMContentLoaded', function () {
       window.location.href = 'login.html';
     });
   }
+  const configBtn = document.querySelector('.config-btn');
+  const configPanel = document.getElementById('configPanel');
+
+  if (configBtn && configPanel) {
+    configBtn.addEventListener('click', (e) => {
+      e.stopPropagation(); // evita cierre inmediato
+      configPanel.style.display = configPanel.style.display === 'flex' ? 'none' : 'flex';
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('#configPanel') && !e.target.closest('.config-btn')) {
+        configPanel.style.display = 'none';
+      }
+    });
+  }
+
+  const temaSelect = document.getElementById('temaSelect');
+  const acentoSelect = document.getElementById('acentoSelect');
+
+  temaSelect.addEventListener('change', () => {
+    document.documentElement.setAttribute('data-tema', temaSelect.value);
+  });
+
+  acentoSelect.addEventListener('change', () => {
+    document.documentElement.style.setProperty('--color-acento', acentoSelect.value);
+  });
 
   fetchAndDisplayNotes();
   fetchAndDisplayFinishedNotes();

@@ -11,15 +11,41 @@
 <header>
     <nav>
         <div class="navitem usuario-dropdown">
-            <img src="./img/account_circle_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt="">
+            <svg class="nav-icon" viewBox="0 0 24 24">
+                <path fill="currentColor" d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5zm0 2c-3.3 0-10 1.7-10 5v3h20v-3c0-3.3-6.7-5-10-5z"/>
+            </svg>
             <a href="#" id="nombreUsuarioHeader" class="usuario-nombre">nombreuser</a>
             <div class="dropdown-menu" id="usuarioDropdownMenu">
                 <button id="logoutBtn">Cerrar sesión</button>
             </div>
         </div>
         <div class="navitem"></div>
-        <div class="navitem"><img src="./img/settings.svg" alt=""></div>
+        <div class="navitem">
+            <svg class="nav-icon config-btn" viewBox="0 0 24 24">
+                <path fill="currentColor" d="M19.14 12.94c.04-.31.06-.63.06-.94s-.02-.63-.06-.94l2.03-1.58a.5.5 0 0 0 .12-.64l-1.92-3.32a.5.5 0 0 0-.61-.22l-2.39.96a7.007 7.007 0 0 0-1.62-.94l-.36-2.54A.5.5 0 0 0 14.5 2h-5a.5.5 0 0 0-.5.42l-.36 2.54c-.6.24-1.15.56-1.62.94l-2.39-.96a.5.5 0 0 0-.61.22L2.71 8.88a.5.5 0 0 0 .12.64l2.03 1.58c-.04.31-.06.63-.06.94s.02.63.06.94l-2.03 1.58a.5.5 0 0 0-.12.64l1.92 3.32c.14.24.43.34.68.22l2.39-.96c.47.38 1.02.7 1.62.94l.36 2.54c.04.25.25.42.5.42h5c.25 0 .46-.17.5-.42l.36-2.54c.6-.24 1.15-.56 1.62-.94l2.39.96c.25.12.54.02.68-.22l1.92-3.32a.5.5 0 0 0-.12-.64l-2.03-1.58zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5S10.07 8.5 12 8.5s3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z"/>
+            </svg>
+        </div>
     </nav>
+    <div id="configPanel" class="config-panel">
+        <h3>Preferencias</h3>
+        <div class="config-item">
+            <label for="temaSelect">Tema:</label>
+            <select id="temaSelect">
+                <option value="oscuro">Oscuro</option>
+                <option value="claro">Claro</option>
+            </select>
+        </div>
+        <div class="config-item">
+            <label for="acentoSelect">Color de acento:</label>
+            <select id="acentoSelect">
+                <option value="#10b981">Verde Jade</option>
+                <option value="#00bcd4">Cyan</option>
+                <option value="#ff4081">Rosa</option>
+                <option value="#4caf50">Verde Clásico</option>
+                <option value="#ff9800">Naranja</option>
+            </select>
+        </div>
+    </div>
 </header>
 <main>
         <div class="container activas-container">
