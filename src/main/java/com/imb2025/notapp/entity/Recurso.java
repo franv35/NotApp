@@ -4,21 +4,20 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import java.util.List;
-import java.util.ArrayList;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
+@Table(name = "recursos")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Etiqueta {
+public class Recurso {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(unique = true, nullable = false)
+
+    @Column(nullable = false)
     private String nombre;
-    @ManyToMany(mappedBy = "etiquetas")
-    @JsonIgnore
-    private List<Note> notas = new ArrayList<>();
+
+    private String descripcion;
 }
