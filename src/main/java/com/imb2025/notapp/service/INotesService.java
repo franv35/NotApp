@@ -3,31 +3,26 @@ package com.imb2025.notapp.service;
 import java.util.List;
 
 import com.imb2025.notapp.entity.Note;
-import com.imb2025.notapp.entity.NoteTerminada;
+import com.imb2025.notapp.entity.dto.NoteResponseDTO;
 import com.imb2025.notapp.entity.dto.RegisterRequest;
+import com.imb2025.notapp.enums.EstadoNota;
 
 public interface INotesService {
 
-    Note findById(Long id);
+    // ✅ Operaciones básicas
+    Note findByIdAndUsuario(Long id, String username);
+    List<Note> findAllByUsuario(String username);
+    Note createNote(RegisterRequest request, String username);
+    void deleteByIdAndUsuario(Long id, String username);
+    Note updateTitle(Long id, String title, String username);
+    Note updateContent(Long id, String content, String username);
+    Note updateNote(Long id, String title, String content, String username);
 
-    List<Note> findAll();
+    // ✅ Filtrado por estado
+    List<Note> findByEstadoAndUsuario(EstadoNota estado, String username);
 
-    String createNote(RegisterRequest request);
-
-    String deleteById(Long id);
-
-    String updateTitle(Long Id, String title);
-
-
-    String updateContent(Long id, String content);
-
-    String updateNote (Long id, String title, String content);
-    List<NoteTerminada>findAllTerminadas();
-
-    String notaTerminada(Long id);
-
-    String deleteTerminadaById(Long id);
-
-    Note agregarEtiquetaANota(Long noteId, String nombreEtiqueta);
-
+    // ✅ Asignaciones
+    Note agregarEtiquetaANota(Long noteId, String nombreEtiqueta, String username);
+    Note agregarColaboradorANota(Long noteId, Long colaboradorId, String username);
+    Note agregarRecursoANota(Long noteId, Long recursoId, String username);
 }

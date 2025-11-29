@@ -1,13 +1,11 @@
 package com.imb2025.notapp.service;
-
 import com.imb2025.notapp.entity.Usuario;
-import com.imb2025.notapp.entity.dto.LoginUserDTO;
 import com.imb2025.notapp.entity.dto.RegisterUserDTO;
+import com.imb2025.notapp.entity.dto.LoginUserDTO;
 import com.imb2025.notapp.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 public class UsuarioServiceImp implements IUsuarioService {
@@ -15,15 +13,19 @@ public class UsuarioServiceImp implements IUsuarioService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @Override
     public String registrarUsuario(RegisterUserDTO dto) {
-        Optional<Usuario> existente = usuarioRepository.findByUsername(dto.getUsername());
-        if (existente.isPresent()) throw new RuntimeException("El usuario ya existe");
+        if (usuarioRepository.findByUsername(dto.getUsername()).isPresent()) {
+            throw new RuntimeException("El usuario ya existe");
+        }
 
         Usuario usuario = new Usuario();
         usuario.setUsername(dto.getUsername());
-        usuario.setPassword(dto.getPassword()); // ⚠️ En producción, usar hash
-        usuario.setNombreCompleto(dto.getNombreCompleto());
+        usuario.setPassword(passwordEncoder.encode(dto.getPassword())); // ✅ encriptar contraseña
+        usuario.setEmail(dto.getEmail());
 
         usuarioRepository.save(usuario);
         return "Usuario registrado correctamente";
@@ -34,10 +36,16 @@ public class UsuarioServiceImp implements IUsuarioService {
         Usuario usuario = usuarioRepository.findByUsername(dto.getUsername())
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
-        if (!usuario.getPassword().equals(dto.getPassword())) {
-            throw new RuntimeException("Contraseña incorrecta");
+        if (!passwordEncoder.matches(dto.getPassword(), usuario.getPassword())) {
+            throw new RuntimeException("Credenciales inválidas");
         }
 
         return usuario;
+    }
+
+    @Override
+    public Usuario findByUsername(String username) {
+        return usuarioRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
     }
 }

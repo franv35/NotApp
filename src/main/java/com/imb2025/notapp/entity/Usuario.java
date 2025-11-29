@@ -21,4 +21,7 @@ public class Usuario {
     private String password;
 
     private String nombreCompleto;
+
+    @Column(unique = true, nullable = false)
+    private String email;
 }

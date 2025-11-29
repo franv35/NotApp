@@ -7,4 +7,5 @@ import com.imb2025.notapp.entity.dto.RegisterUserDTO;
 public interface IUsuarioService {
     String registrarUsuario(RegisterUserDTO dto);
     Usuario login(LoginUserDTO dto);
+    Usuario findByUsername(String username); // ✅ agregado
 }

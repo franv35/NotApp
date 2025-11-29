@@ -2,135 +2,89 @@ package com.imb2025.notapp.service;
 
 import com.imb2025.notapp.entity.Etiqueta;
 import com.imb2025.notapp.entity.Note;
-import java.util.ArrayList;
-
-import java.util.List;
-import java.util.Optional;
-
-
-import com.imb2025.notapp.entity.NoteTerminada;
+import com.imb2025.notapp.entity.Usuario;
+import com.imb2025.notapp.enums.EstadoNota;
 import com.imb2025.notapp.entity.dto.RegisterRequest;
-import com.imb2025.notapp.repository.NoteTerminadaRepository;
 import com.imb2025.notapp.repository.NotesRepository;
+import com.imb2025.notapp.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class NotesServiceImp implements INotesService {
 
     @Autowired
     private NotesRepository noteRepository;
+
     @Autowired
-    private NoteTerminadaRepository noteTerminadaRepository;
-
-    @Override
-    public List<Note> findAll() {
-        return noteRepository.findAll(); // sin lanzar excepción
-    }
-
-
-    @Override
-    public Note findById(Long id) {
-    return findByIdRepository(id);
-    }
-
-    @Override
-    public String createNote(RegisterRequest request) {
-       Optional<Note> noteOpt=findByTitleRepository(request.getTitle());
-       if (noteOpt.isPresent())throw new RuntimeException("La nota ya existe");
-       Note note=new Note();
-        note.updateTitle(request.getTitle());
-
-        note.updateContenido(request.getContenido());
-
-       noteRepository.save(note);
-       return "Nota creada exitosamente";
-    }
-
-
-    private Optional<Note> findByTitleRepository(String title){
-        return noteRepository.findByTitle(title);
-    }
-
-    @Override
-    public String deleteById(Long id){
-        Note note=findByIdRepository(id);
-        noteRepository.deleteById(note.getId());
-        return "Borrado exitosamente";
-
-    }
-
-    @Override
-    public String updateTitle(Long id, String title){
-       Note note= findByIdRepository(id);
-        note.updateTitle(title);
-        noteRepository.save(note);
-        return "Se ha editado correctamente el titulo";
-    }
-
-    @Override
-    public String updateNote(Long id, String title, String content) {
-        Note note = findByIdRepository(id);
-        note.updateContenido(content);
-        note.updateTitle(title);
-        noteRepository.save(note);
-        return "Se ha editado correctamente la nota";
-
-    }
-
-
-
-
-    @Override
-    public String updateContent(Long id, String content) {
-        Note note= findByIdRepository(id);
-        note.updateContenido(content);
-        noteRepository.save(note);
-        return "Se ha editado correctamente el contenido";
-    }
-
-    @Override
-    public List<NoteTerminada> findAllTerminadas() {
-        return noteTerminadaRepository.findAll(); // sin lanzar excepción
-    }
-
-
-    @Override
-    public String notaTerminada(Long id) {
-        Note note = findByIdRepository(id);
-
-        NoteTerminada noteTerminada = new NoteTerminada();
-        noteTerminada.setTitle(note.getTitle());
-        noteTerminada.setContenido(note.getContenido());
-
-        //Copiar etiquetas si existen
-        if (note.getEtiquetas() != null && !note.getEtiquetas().isEmpty()) {
-            noteTerminada.setEtiquetas(new ArrayList<>(note.getEtiquetas()));
-        }
-        noteTerminadaRepository.save(noteTerminada);
-        noteRepository.delete(note);
-
-        return "Borrada con éxito";
-    }
-
-    private Note findByIdRepository(Long id){
-        return noteRepository.findById(id).orElseThrow(()->new RuntimeException("La nota no existe"));
-    }
-
-    @Override
-    public String deleteTerminadaById(Long id) {
-        NoteTerminada nota = noteTerminadaRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("La nota terminada no existe"));
-        noteTerminadaRepository.delete(nota);
-        return "Nota terminada eliminada";
-    }
+    private UsuarioRepository usuarioRepository;
 
     @Autowired
     private EtiquetaService etiquetaService;
 
     @Override
-    public Note agregarEtiquetaANota(Long noteId, String nombreEtiqueta) {
-        Note note = findById(noteId);
+    public List<Note> findAllByUsuario(String username) {
+        return noteRepository.findByUsuarioUsername(username);
+    }
+
+    @Override
+    public Note findByIdAndUsuario(Long id, String username) {
+        return noteRepository.findByIdAndUsuarioUsername(id, username)
+                .orElseThrow(() -> new RuntimeException("La nota no existe o no pertenece al usuario"));
+    }
+
+    @Override
+    public Note createNote(RegisterRequest request, String username) {
+        Usuario usuario = usuarioRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+        Note note = new Note();
+        note.updateTitle(request.getTitle());
+        note.updateContenido(request.getContenido());
+        note.setEstado(EstadoNota.CREADA);
+        note.setUsuario(usuario);
+
+        return noteRepository.save(note);
+    }
+
+    @Override
+    public void deleteByIdAndUsuario(Long id, String username) {
+        Note note = findByIdAndUsuario(id, username);
+        noteRepository.delete(note);
+    }
+
+    @Override
+    public Note updateTitle(Long id, String title, String username) {
+        Note note = findByIdAndUsuario(id, username);
+        note.updateTitle(title);
+        return noteRepository.save(note);
+    }
+
+    @Override
+    public Note updateContent(Long id, String content, String username) {
+        Note note = findByIdAndUsuario(id, username);
+        note.updateContenido(content);
+        return noteRepository.save(note);
+    }
+
+    @Override
+    public Note updateNote(Long id, String title, String content, String username) {
+        Note note = findByIdAndUsuario(id, username);
+        note.updateTitle(title);
+        note.updateContenido(content);
+        return noteRepository.save(note);
+    }
+
+    @Override
+    public List<Note> findByEstadoAndUsuario(EstadoNota estado, String username) {
+        return noteRepository.findByEstadoAndUsuarioUsername(estado, username);
+    }
+
+    @Override
+    public Note agregarEtiquetaANota(Long noteId, String nombreEtiqueta, String username) {
+        Note note = findByIdAndUsuario(noteId, username);
 
         Etiqueta etiqueta = etiquetaService.findByNombre(nombreEtiqueta)
                 .orElseGet(() -> {
@@ -147,5 +101,19 @@ public class NotesServiceImp implements INotesService {
         return note;
     }
 
+    @Override
+    public Note agregarColaboradorANota(Long noteId, Long colaboradorId, String username) {
+        Note note = findByIdAndUsuario(noteId, username);
+        // lógica para buscar colaborador y agregarlo
+        // note.getColaboradores().add(colaborador);
+        return noteRepository.save(note);
+    }
 
+    @Override
+    public Note agregarRecursoANota(Long noteId, Long recursoId, String username) {
+        Note note = findByIdAndUsuario(noteId, username);
+        // lógica para buscar recurso y agregarlo
+        // note.getRecursos().add(recurso);
+        return noteRepository.save(note);
+    }
 }
