@@ -4,6 +4,7 @@ import com.imb2025.notapp.entity.dto.RegisterUserDTO;
 import com.imb2025.notapp.entity.dto.LoginUserDTO;
 import com.imb2025.notapp.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +18,7 @@ public class UsuarioServiceImp implements IUsuarioService {
     private PasswordEncoder passwordEncoder;
 
     @Override
+    @Transactional
     public String registrarUsuario(RegisterUserDTO dto) {
         if (usuarioRepository.findByUsername(dto.getUsername()).isPresent()) {
             throw new RuntimeException("El usuario ya existe");
@@ -26,6 +28,7 @@ public class UsuarioServiceImp implements IUsuarioService {
         usuario.setUsername(dto.getUsername());
         usuario.setPassword(passwordEncoder.encode(dto.getPassword())); // ✅ encriptar contraseña
         usuario.setEmail(dto.getEmail());
+        usuario.setNombreCompleto(dto.getNombreCompleto()); // ✅ importante
 
         usuarioRepository.save(usuario);
         return "Usuario registrado correctamente";

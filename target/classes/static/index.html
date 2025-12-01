@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NotApp</title>
+    <link rel="stylesheet" href="./new.css">
+    <script src="./script.js"></script>
+</head>
+<body>
+<header>
+    <nav>
+        <div class="navitem usuario-dropdown">
+            <svg class="nav-icon" viewBox="0 0 24 24">
+                <path fill="currentColor" d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5zm0 2c-3.3 0-10 1.7-10 5v3h20v-3c0-3.3-6.7-5-10-5z"/>
+            </svg>
+            <a href="#" id="nombreUsuarioHeader" class="usuario-nombre">nombreuser</a>
+            <div class="dropdown-menu" id="usuarioDropdownMenu">
+                <button id="logoutBtn">Cerrar sesión</button>
+            </div>
+        </div>
+        <div class="navitem"></div>
+        <div class="navitem">
+            <svg class="nav-icon config-btn" viewBox="0 0 24 24">
+                <path fill="currentColor" d="M19.14 12.94c.04-.31.06-.63.06-.94s-.02-.63-.06-.94l2.03-1.58a.5.5 0 0 0 .12-.64l-1.92-3.32a.5.5 0 0 0-.61-.22l-2.39.96a7.007 7.007 0 0 0-1.62-.94l-.36-2.54A.5.5 0 0 0 14.5 2h-5a.5.5 0 0 0-.5.42l-.36 2.54c-.6.24-1.15.56-1.62.94l-2.39-.96a.5.5 0 0 0-.61.22L2.71 8.88a.5.5 0 0 0 .12.64l2.03 1.58c-.04.31-.06.63-.06.94s.02.63.06.94l-2.03 1.58a.5.5 0 0 0-.12.64l1.92 3.32c.14.24.43.34.68.22l2.39-.96c.47.38 1.02.7 1.62.94l.36 2.54c.04.25.25.42.5.42h5c.25 0 .46-.17.5-.42l.36-2.54c.6-.24 1.15-.56 1.62-.94l2.39.96c.25.12.54.02.68-.22l1.92-3.32a.5.5 0 0 0-.12-.64l-2.03-1.58zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5S10.07 8.5 12 8.5s3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z"/>
+            </svg>
+        </div>
+    </nav>
+    <div id="configPanel" class="config-panel">
+        <h3>Preferencias</h3>
+        <div class="config-item">
+            <label for="temaSelect">Tema:</label>
+            <select id="temaSelect">
+                <option value="oscuro">Oscuro</option>
+                <option value="claro">Claro</option>
+            </select>
+        </div>
+        <div class="config-item">
+            <label for="acentoSelect">Color de acento:</label>
+            <select id="acentoSelect">
+                <option value="#10b981">Verde Jade</option>
+                <option value="#00bcd4">Cyan</option>
+                <option value="#ff4081">Rosa</option>
+                <option value="#4caf50">Verde Clásico</option>
+                <option value="#ff9800">Naranja</option>
+            </select>
+        </div>
+    </div>
+</header>
+<main>
+        <div class="container activas-container">
+            <h2>Notas Activas</h2>
+        </div>
+
+        <div class="container terminadas-container">
+            <h2>Notas Terminadas</h2>
+        </div>
+    </main>
+
+    <!-- Botón flotante fuera del grid -->
+    <div class="newnote" id="openModal">+</div>
+
+    <!-- Modal -->
+    <div id="noteModal" class="modal">
+        <div class="modal-content">
+            <span id="closeModal" class="close">&times;</span>
+            <h2>Escribir una nota</h2>
+            <input type="text" id="modalNoteTitle" placeholder="Título">
+            <textarea id="modalNoteContent" placeholder="Contenido de la nota"></textarea>
+            <button id="saveNoteBtn">Guardar</button>
+        </div>
+    </div>
+
+    <footer>
+
+    </footer>
+</body>
+</html>

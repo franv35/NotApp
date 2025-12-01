@@ -26,7 +26,8 @@ public class Colaborador {
     @Column(unique = true, nullable = false, length = 150)
     private String email;
 
-    @ManyToMany(mappedBy = "personas") // relación inversa con Note
+    @ManyToMany(mappedBy = "colaboradores")
     @JsonIgnore
     private List<Note> tareas = new ArrayList<>();
 }
+

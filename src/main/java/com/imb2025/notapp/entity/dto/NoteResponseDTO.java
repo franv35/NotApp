@@ -2,6 +2,7 @@ package com.imb2025.notapp.entity.dto;
 
 import com.imb2025.notapp.entity.Etiqueta;
 import com.imb2025.notapp.entity.Usuario;
+import com.imb2025.notapp.entity.Colaborador;
 import com.imb2025.notapp.entity.Recurso;
 import com.imb2025.notapp.enums.EstadoNota;
 import lombok.Data;
@@ -16,6 +17,6 @@ public class NoteResponseDTO {
     private EstadoNota estado;
     private Usuario usuario;
     private List<Etiqueta> etiquetas;
-    private List<Usuario> colaboradores;
+    private List<Colaborador> colaboradores;
     private List<Recurso> recursos;
 }

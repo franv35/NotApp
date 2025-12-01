@@ -41,8 +41,8 @@ public class NotesServiceImp implements INotesService {
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
         Note note = new Note();
-        note.updateTitle(request.getTitle());
-        note.updateContenido(request.getContenido());
+        note.setTitle(request.getTitle());
+        note.setContenido(request.getContenido());
         note.setEstado(EstadoNota.CREADA);
         note.setUsuario(usuario);
 
@@ -58,22 +58,22 @@ public class NotesServiceImp implements INotesService {
     @Override
     public Note updateTitle(Long id, String title, String username) {
         Note note = findByIdAndUsuario(id, username);
-        note.updateTitle(title);
+        note.setTitle(title);
         return noteRepository.save(note);
     }
 
     @Override
     public Note updateContent(Long id, String content, String username) {
         Note note = findByIdAndUsuario(id, username);
-        note.updateContenido(content);
+        note.setContenido(content);
         return noteRepository.save(note);
     }
 
     @Override
     public Note updateNote(Long id, String title, String content, String username) {
         Note note = findByIdAndUsuario(id, username);
-        note.updateTitle(title);
-        note.updateContenido(content);
+        note.setTitle(title);
+        note.setContenido(content);
         return noteRepository.save(note);
     }
 
